@@ -91,8 +91,8 @@ button:hover {
 
 .moodboard-img {
     flex: 1;
-    height: 60px;
-    border-radius: 4px;
+    height: 100px;
+    border-radius: 8px;
 }
 
 .avatar-placeholder {
