@@ -8,25 +8,25 @@ body {
 
 /* Header section styling */
 header {
-    background: #1a0a00;
-    color: #fff;
+    background: #060743;
+    color: #d91919;
     padding: 10px 0;
     text-align: center;
 }
 
 /* Styling for team logo image */
 .team-logo {
-    width: 150px; /* Adjust the size as needed */
+    width: 200px; /* Adjust the size as needed */
     margin-top: 10px;
 }
 
 /* Menu button styling */
 header nav {
-    margin-top: 10px;
+    margin-top: 30px;
 }
 
 header nav button {
-    background: #d06020;
+    background: #d92121;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -41,7 +41,7 @@ header nav button:hover {
 
 /* Flex container for team bios and vision sections */
 .container {
-    width: 80%;
+    width: 100%;
     margin: 20px auto;
     display: flex;
     flex-wrap: wrap;
@@ -50,7 +50,7 @@ header nav button:hover {
 
 /* Card styling for individual team bios */
 .card {
-    background: white;
+    background: rgb(239, 214, 214);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin: 10px;
