@@ -1,15 +1,33 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME
-from sqlalchemy.orm import relationship
+from typing import Optional
 from datetime import datetime
-from ..dependencies.database import Base
+from pydantic import BaseModel
+from ..models.orders import OrderStatus
+from .order_details import OrderDetail
 
 
-class Order(Base):
-    __tablename__ = "orders"
+class OrderBase(BaseModel):
+    customer_id: int
+    total_price: float
+    promotion_id: Optional[int] = None
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    customer_name = Column(String(100))
-    order_date = Column(DATETIME, nullable=False, server_default=str(datetime.now()))
-    description = Column(String(300))
 
-    order_details = relationship("OrderDetail", back_populates="order")
+class OrderCreate(OrderBase):
+    pass
+
+
+class OrderUpdate(BaseModel):
+    status: Optional[OrderStatus] = None
+    total_price: Optional[float] = None
+    tracking_number: Optional[str] = None
+    promotion_id: Optional[int] = None
+
+
+class Order(OrderBase):
+    id: int
+    order_date: Optional[datetime] = None
+    tracking_number: Optional[str] = None
+    status: OrderStatus
+    order_details: list[OrderDetail] = []
+
+    class ConfigDict:
+        from_attributes = True
