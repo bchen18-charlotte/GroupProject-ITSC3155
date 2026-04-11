@@ -20,8 +20,8 @@ class RecipeUpdate(BaseModel):
 
 class Recipe(RecipeBase):
     id: int
-    sandwich: Sandwich = int
-    resource: Resource = int
+    sandwich: Sandwich = None
+    resource: Resource = None
 
     class ConfigDict:
         from_attributes = True
