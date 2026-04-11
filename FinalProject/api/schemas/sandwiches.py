@@ -1,11 +1,14 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class SandwichBase(BaseModel):
     sandwich_name: str
+    description: Optional[str] = None
     price: float
+    calories: Optional[int] = None
+    category: str
 
 
 class SandwichCreate(SandwichBase):
@@ -14,7 +17,10 @@ class SandwichCreate(SandwichBase):
 
 class SandwichUpdate(BaseModel):
     sandwich_name: Optional[str] = None
+    description: Optional[str] = None
     price: Optional[float] = None
+    calories: Optional[int] = None
+    category: Optional[str] = None
 
 
 class Sandwich(SandwichBase):
