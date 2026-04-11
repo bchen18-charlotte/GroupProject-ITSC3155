@@ -1,16 +1,15 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME
+from sqlalchemy import Column, Integer, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
-from datetime import datetime
 from ..dependencies.database import Base
 
 
-class Recipe(Base):
-    __tablename__ = "recipes"
+class MenuItemIngredient(Base):
+    __tablename__ = "menu_item_ingredients"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    sandwich_id = Column(Integer, ForeignKey("sandwiches.id"))
-    resource_id = Column(Integer, ForeignKey("resources.id"))
-    amount = Column(Integer, index=True, nullable=False, server_default='0.0')
+    sandwich_id = Column(Integer, ForeignKey("menu_items.id"), nullable=False)
+    resource_id = Column(Integer, ForeignKey("ingredients.id"), nullable=False)
+    amount = Column(DECIMAL(10, 2), nullable=False, server_default='0.00')
 
-    sandwich = relationship("Sandwich", back_populates="recipes")
-    resource = relationship("Resource", back_populates="recipes")
+    menu_item = relationship("MenuItem", back_populates="recipes")
+    ingredient = relationship("Ingredient", back_populates="recipes")
