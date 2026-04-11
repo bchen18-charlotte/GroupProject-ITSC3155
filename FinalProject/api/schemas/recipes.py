@@ -6,7 +6,7 @@ from .sandwiches import Sandwich
 
 
 class RecipeBase(BaseModel):
-    amount: int
+    amount: float
 
 
 class RecipeCreate(RecipeBase):
@@ -20,8 +20,8 @@ class RecipeUpdate(BaseModel):
 
 class Recipe(RecipeBase):
     id: int
-    sandwich: Sandwich = None
-    resource: Resource = None
+    sandwich: Sandwich = int
+    resource: Resource = int
 
     class ConfigDict:
         from_attributes = True
