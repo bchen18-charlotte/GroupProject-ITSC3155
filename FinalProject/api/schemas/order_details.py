@@ -17,7 +17,7 @@ class OrderDetailUpdate(BaseModel):
     order_id: Optional[int] = None
     sandwich_id: Optional[int] = None
     amount: Optional[int] = None
-    unit_price: Optional[float] = Nonw
+    unit_price: Optional[float] = None
 
 
 class OrderDetail(OrderDetailBase):
