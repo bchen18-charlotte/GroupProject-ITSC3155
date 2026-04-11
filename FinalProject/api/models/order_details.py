@@ -8,8 +8,8 @@ class OrderDetail(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
-    menu_item_id = Column(Integer, ForeignKey("menu_items.id"), nullable=False)
-    quantity = Column(Integer, nullable=False, server_default='1')
+    sandwich_id = Column(Integer, ForeignKey("menu_items.id"), nullable=False)
+    amount = Column(Integer, nullable=False, server_default='1')
     unit_price = Column(DECIMAL(6, 2), nullable=False, server_default='0.00')
 
     order = relationship("Order", back_populates="order_details")
