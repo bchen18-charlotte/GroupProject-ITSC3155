@@ -3,11 +3,9 @@ from typing import Optional
 from pydantic import BaseModel
 from .sandwiches import Sandwich
 
-
 class OrderDetailBase(BaseModel):
     amount: int
     unit_price: float
-
 
 class OrderDetailCreate(OrderDetailBase):
     order_id: int
@@ -19,11 +17,10 @@ class OrderDetailUpdate(BaseModel):
     amount: Optional[int] = None
     unit_price: Optional[float] = None
 
-
 class OrderDetail(OrderDetailBase):
     id: int
     order_id: int
-    sandwich:Optional[Sandwich] = None
+    sandwich: Optional[Sandwich] = None
 
     class ConfigDict:
         from_attributes = True

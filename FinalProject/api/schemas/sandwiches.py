@@ -10,10 +10,8 @@ class SandwichBase(BaseModel):
     calories: Optional[int] = None
     category: str
 
-
 class SandwichCreate(SandwichBase):
     pass
-
 
 class SandwichUpdate(BaseModel):
     sandwich_name: Optional[str] = None
@@ -21,7 +19,6 @@ class SandwichUpdate(BaseModel):
     price: Optional[float] = None
     calories: Optional[int] = None
     category: Optional[str] = None
-
 
 class Sandwich(SandwichBase):
     id: int
