@@ -1,27 +1,18 @@
-from typing import Optional
+from sqlalchemy import Column, Integer, String, ForeignKey, DATETIME
+from sqlalchemy.orm import relationship
 from datetime import datetime
-from pydantic import BaseModel
+from ..dependencies.database import Base
 
 
-class ReviewBase(BaseModel):
-    customer_id: int
-    order_id: int
-    score: int
-    review_text: Optional[str] = None
+class Review(Base):
+    __tablename__ = "reviews"
 
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
+    score = Column(Integer, nullable=False)
+    review_text = Column(String(1000), nullable=True)
+    review_date = Column(DATETIME, nullable=False, server_default=str(datetime.now()))
 
-class ReviewCreate(ReviewBase):
-    pass
-
-
-class ReviewUpdate(BaseModel):
-    score: Optional[int] = None
-    review_text: Optional[str] = None
-
-
-class Review(ReviewBase):
-    id: int
-    review_date: Optional[datetime] = None
-
-    class ConfigDict:
-        from_attributes = True
+    customer = relationship("Customer", back_populates="reviews")
+    order = relationship("Order", back_populates="review")

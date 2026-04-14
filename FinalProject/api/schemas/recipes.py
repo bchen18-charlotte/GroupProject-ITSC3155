@@ -4,10 +4,8 @@ from pydantic import BaseModel
 from .resources import Resource
 from .sandwiches import Sandwich
 
-
 class RecipeBase(BaseModel):
     amount: int
-
 
 class RecipeCreate(RecipeBase):
     sandwich_id: int

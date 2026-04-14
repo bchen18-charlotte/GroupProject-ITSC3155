@@ -2,20 +2,19 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
-
 class SandwichBase(BaseModel):
     sandwich_name: str
+    description: Optional[str] = None
     price: float
-
+    calories: Optional[int] = None
+    category: str
 
 class SandwichCreate(SandwichBase):
     pass
 
-
 class SandwichUpdate(BaseModel):
     sandwich_name: Optional[str] = None
     price: Optional[float] = None
-
 
 class Sandwich(SandwichBase):
     id: int

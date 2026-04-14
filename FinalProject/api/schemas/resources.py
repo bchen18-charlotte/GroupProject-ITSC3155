@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class ResourceBase(BaseModel):
     item: str
     amount: int
-
+    unit: str
 
 class ResourceCreate(ResourceBase):
     pass

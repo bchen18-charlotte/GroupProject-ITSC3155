@@ -3,10 +3,8 @@ from typing import Optional
 from pydantic import BaseModel
 from .sandwiches import Sandwich
 
-
 class OrderDetailBase(BaseModel):
     amount: int
-
 
 class OrderDetailCreate(OrderDetailBase):
     order_id: int
