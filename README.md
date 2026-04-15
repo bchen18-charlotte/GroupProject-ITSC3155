@@ -1,1 +1,3 @@
-Will be updated as the projects gets farther along
+## Team 17
+ITSC 3155 - Software Engineering
+University of North Carolina at Charlotte
