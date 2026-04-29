@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class PromotionBase(BaseModel):
     code: str
     discount_percent: float
+    start_date: Optional[datetime] = None
     expiration_date: datetime
 
 class PromotionCreate(PromotionBase):
@@ -13,6 +14,7 @@ class PromotionCreate(PromotionBase):
 class PromotionUpdate(BaseModel):
     code: Optional[str] = None
     discount_percent: Optional[float] = None
+    start_date: Optional[datetime] = None
     expiration_date: Optional[datetime] = None
 
 class Promotion(PromotionBase):

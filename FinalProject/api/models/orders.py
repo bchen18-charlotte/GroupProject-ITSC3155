@@ -18,16 +18,11 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-
-    #Guest logic
     customer_name = Column(String(100), nullable=False)
     phone = Column(String(20), nullable=True)
     address = Column(String(300), nullable=True)
     order_type = Column(String(50), nullable=False, server_default='pickup')
-
-    #link to customer account if one is had
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=True)
-
     order_date = Column(DATETIME, nullable=False, server_default=str(datetime.now()))
     tracking_number = Column(String(100), unique=True, nullable=True)
     status = Column(Enum(OrderStatus), nullable=False, server_default="pending")
@@ -39,3 +34,4 @@ class Order(Base):
     payment = relationship("Payment", back_populates="order", uselist=False)
     promotion = relationship("Promotion", back_populates="orders")
     review = relationship("Review", back_populates="order", uselist=False)
+    queue_entry = relationship("OrderQueue", back_populates="order", uselist=False)
