@@ -26,7 +26,7 @@ def read_all(db: Session):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return result
 
-def read_one(db: Session, item_id):
+def read_one(db: Session, item_id: int):
     try:
         item = db.query(model.MenuItem).filter(model.MenuItem.id == item_id).first()
         if not item:
@@ -36,7 +36,35 @@ def read_one(db: Session, item_id):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return item
 
-def update(db: Session, item_id, request):
+def search(db: Session, name: str = None, category: str = None, active_only: bool = None):
+    try:
+        query = db.query(model.MenuItem)
+        if name:
+            query = query.filter(model.MenuItem.sandwich_name.ilike(f"%{name}%"))
+        if category:
+            query = query.filter(model.MenuItem.category == category)
+        if active_only is not None:
+            query = query.filter(model.MenuItem.is_active == active_only)
+        result = query.all()
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return result
+
+def toggle_active(db: Session, item_id: int):
+    try:
+        item = db.query(model.MenuItem).filter(model.MenuItem.id == item_id).first()
+        if not item:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
+        item.is_active = not item.is_active
+        db.commit()
+        db.refresh(item)
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return item
+
+def update(db: Session, item_id: int, request):
     try:
         item = db.query(model.MenuItem).filter(model.MenuItem.id == item_id)
         if not item.first():
@@ -49,7 +77,7 @@ def update(db: Session, item_id, request):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return item.first()
 
-def delete(db: Session, item_id):
+def delete(db: Session, item_id: int):
     try:
         item = db.query(model.MenuItem).filter(model.MenuItem.id == item_id)
         if not item.first():
