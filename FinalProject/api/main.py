@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .routers import index as indexRoute
 from .models import model_loader
 from .dependencies.config import conf
+from .seed import seed
 
 
 app = FastAPI()
@@ -19,6 +20,7 @@ app.add_middleware(
 )
 
 model_loader.index()
+seed()
 indexRoute.load_routes(app)
 
 

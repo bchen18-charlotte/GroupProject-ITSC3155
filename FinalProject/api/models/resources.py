@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, DECIMAL
 from sqlalchemy.orm import relationship
 from ..dependencies.database import Base
 
-
 class Ingredient(Base):
     __tablename__ = "ingredients"
 
