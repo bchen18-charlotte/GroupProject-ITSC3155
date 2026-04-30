@@ -1,18 +1,30 @@
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 from ..main import app
 from ..dependencies.database import get_db
 from ..models import sandwiches as sandwich_model
 
-# Create test client for making API requests
+#test client
 client = TestClient(app)
+
+def ensure_is_active_column():
+    db = next(get_db())
+    columns = db.execute(text("SHOW COLUMNS FROM menu_items")).fetchall()
+    if not any(column[0] == "is_active" for column in columns):
+        db.execute(text("ALTER TABLE menu_items ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT 1"))
+        db.commit()
+
+    db.close()
+ensure_is_active_column()
+
+
 """
-Checks if our test sandwich already exists in the database.
-If it exists reuse 
-If it does not exist create it
+checks if our test sandwich already exists in the database  
+If it exists reuse  
+If it does not exist create it 
 """
 def get_or_create_menu_item():
     sandwich_name = "Test Sandwich"
-
     #connect to database
     db = next(get_db())
     item = db.query(sandwich_model.MenuItem).filter(sandwich_model.MenuItem.sandwich_name == sandwich_name).first()
@@ -34,17 +46,14 @@ def get_or_create_menu_item():
 
     #post
     response = client.post("/menuitems/", json=payload)
-
     #verify
     assert response.status_code == 200
     return response.json()["id"]
 
-
 """
-Creates a test order and then returns its ID.
+creates a test order and then returns its ID.
 """
 def create_order():
-
     #create
     payload = {
         "customer_name": "Test Customer",
@@ -61,7 +70,6 @@ def create_order():
     #verify
     assert response.status_code == 200
     return response.json()["id"]
-
 
 """
 test creating one order detail.
@@ -83,10 +91,10 @@ def test_create_order_detail():
     #verify
     assert response.status_code == 200
     data = response.json()
-
     #verify
     assert data["order_id"] == payload["order_id"]
     assert data["amount"] == payload["amount"]
+
 
 """
 Test rretrieving one order detail by ID.
@@ -102,7 +110,6 @@ def test_get_order_detail():
         "sandwich_id": sandwich_id,
         "amount": 3
     }
-
     #post
     response = client.post("/orderdetails/", json=payload)
 
