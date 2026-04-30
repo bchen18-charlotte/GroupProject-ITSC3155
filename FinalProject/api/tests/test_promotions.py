@@ -1,93 +1,122 @@
 from fastapi.testclient import TestClient
 from ..main import app
+from ..dependencies.database import get_db
+from ..models import promotions as promotion_model
 
-#test client  
+#test client
 client = TestClient(app)
 
 """
-test creates a new promotion.
-create, check, verify
+deletes promo if it exists already
+"""
+def delete_promotion_by_code(code):
+    #db
+    db = next(get_db())
+
+    #follow same logic as previous
+    promotion = db.query(promotion_model.Promotion).filter(promotion_model.Promotion.code == code).first()
+
+    #if found delete
+    if promotion:
+        db.delete(promotion)
+        db.commit()
+
+    db.close()
+
+"""
+test creating a promo 
+create, delete, post, verify 
 """
 def test_create_promotion():
-    #create payload
+    #create
     payload = {
         "code": "SAVE10",
         "discount_percent": 10,
         "expiration_date": "2026-12-31"
     }
 
+    #remove old code
+    delete_promotion_by_code(payload["code"])
+    #post
     response = client.post("/promotions/", json=payload)
 
-    #check for 201
-    assert response.status_code == 201
-    data = response.json()
-
-    #verify 
-    assert data["code"] == payload["code"] 
-    assert data["discount_percent"] == payload["discount_percent"] 
-    assert data["expiration_date"] == payload["expiration_date"]
-
-
-"""
-test retrieves a single promotion by ID.
-create, get, verify 
-"""
-def test_get_promotion():
-    #create 
-    payload = {
-        "code": "SAVE20",
-        "discount_percent": 20, 
-        "expiration_date": "2026-12-31" 
-    }
-
-    response = client.post("/promotions/", json=payload) 
-    assert response.status_code == 201
-
-    data = response.json()
-    promotion_id = data["id"]
-
-    #get
-    response = client.get(f"/promotions/{promotion_id}")
+    #verify
     assert response.status_code == 200
     data = response.json()
 
-    #veify 
+    #verify
     assert data["code"] == payload["code"]
-    assert data["discount_percent"] == payload["discount_percent"] 
-    assert data["expiration_date"] == payload["expiration_date"]
+    assert data["discount_percent"] == payload["discount_percent"]
+    assert data["expiration_date"][:10] == payload["expiration_date"]
 
 
 """
-test retrieves all promotions. 
-create, get, verify
+test getting a promo
+create, delete duplicates, get, and verify
+"""
+def test_get_promotion():
+
+    #create
+    payload = {
+        "code": "SAVE20",
+        "discount_percent": 20,
+        "expiration_date": "2026-12-31"
+    }
+    #remove
+    delete_promotion_by_code(payload["code"])
+    #post
+    response = client.post("/promotions/", json=payload)
+
+    #verify
+    assert response.status_code == 200
+    promotion_id = response.json()["id"]
+    #get
+    response = client.get(f"/promotions/{promotion_id}")
+
+    #verify
+    assert response.status_code == 200
+    data = response.json()
+
+    #verify
+    assert data["code"] == payload["code"]
+    assert data["discount_percent"] == payload["discount_percent"]
+    assert data["expiration_date"][:10] == payload["expiration_date"]
+
+
+"""
+test getting all promotions. 
+create, delete duplicates, get, and verify
 """
 def test_get_all_promotions():
-    #create 
+
+    #create promos
     promotions = [
         {
-            "code": "SAVE30", 
-            "discount_percent": 30, 
+            "code": "SAVE30",
+            "discount_percent": 30,
             "expiration_date": "2026-12-31"
         },
         {
             "code": "SAVE40",
-            "discount_percent": 40, 
+            "discount_percent": 40,
             "expiration_date": "2026-12-31"
         }
     ]
-
     for promotion in promotions:
-        response = client.post("/promotions/", json=promotion)  
-        assert response.status_code == 201
+        #delete
+        delete_promotion_by_code(promotion["code"])
+        response = client.post("/promotions/", json=promotion)
+        #verify
+        assert response.status_code == 200
 
-    #get 
-    response = client.get("/promotions/") 
+    #get
+    response = client.get("/promotions/")
 
-    #check for 200
-    assert response.status_code == 200 
-    data = response.json() 
+    #verify
+    assert response.status_code == 200
+    data = response.json()
     codes = [item["code"] for item in data]
 
-    #chekc codes exits
-    assert "SAVE30" in codes 
+    #verify
+    assert "SAVE30" in codes
     assert "SAVE40" in codes

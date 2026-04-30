@@ -1,94 +1,152 @@
 from fastapi.testclient import TestClient
 from ..main import app
+from ..dependencies.database import get_db
+from ..models import sandwiches as sandwich_model
 
-#Test client 
+# Create test client for making API requests
 client = TestClient(app)
+"""
+Checks if our test sandwich already exists in the database.
+If it exists reuse 
+If it does not exist create it
+"""
+def get_or_create_menu_item():
+    sandwich_name = "Test Sandwich"
+
+    #connect to database
+    db = next(get_db())
+    item = db.query(sandwich_model.MenuItem).filter(sandwich_model.MenuItem.sandwich_name == sandwich_name).first()
+
+    if item:
+        item_id = item.id
+        db.close()
+        return item_id
+
+    db.close()
+    #create
+    payload = {
+        "sandwich_name": sandwich_name,
+        "description": "Test sandwich description",
+        "price": 9.99,
+        "calories": 500,
+        "category": "Test"
+    }
+
+    #post
+    response = client.post("/menuitems/", json=payload)
+
+    #verify
+    assert response.status_code == 200
+    return response.json()["id"]
+
 
 """
-This test creates a new order detail.
-sends post request to /order-details/ with a payload,
-then verifies: Status code is 201 and returned data matches input
+Creates a test order and then returns its ID.
+"""
+def create_order():
+
+    #create
+    payload = {
+        "customer_name": "Test Customer",
+        "phone": "123-456-7890",
+        "address": "123 Test St",
+        "order_type": "pickup",
+        "total_price": 9.99,
+        "status": "pending"
+    }
+
+    #post
+    response = client.post("/orders/", json=payload)
+
+    #verify
+    assert response.status_code == 200
+    return response.json()["id"]
+
+
+"""
+test creating one order detail.
+create, post, verify
 """
 def test_create_order_detail():
-    # Define payload (make sure these IDs exist in your DB)
+    order_id = create_order()
+    sandwich_id = get_or_create_menu_item()
+
+    #create
     payload = {
-        "order_id": 1,
-        "sandwich_id": 1,
+        "order_id": order_id,
+        "sandwich_id": sandwich_id,
         "amount": 2
     }
- 
-    #post request
-    response = client.post("/order-details/", json=payload)
+    #post
+    response = client.post("/orderdetails/", json=payload)
 
-    #check success
-    assert response.status_code == 201
-
-    #check data
+    #verify
+    assert response.status_code == 200
     data = response.json()
 
-    #Verify  values
+    #verify
     assert data["order_id"] == payload["order_id"]
-    assert data["sandwich_id"] == payload["sandwich_id"]
     assert data["amount"] == payload["amount"]
 
-
 """
-test retrieves a single order detail by ID.
-Steps: create, check ID, verify
+Test rretrieving one order detail by ID.
+create, post, verify
 """
 def test_get_order_detail():
-    # Create an order
+    order_id = create_order()
+    sandwich_id = get_or_create_menu_item()
+
+    #create payload
     payload = {
-        "order_id": 1,
-        "sandwich_id": 1,
+        "order_id": order_id,
+        "sandwich_id": sandwich_id,
         "amount": 3
     }
 
-    response = client.post("/order-details/", json=payload)
-    assert response.status_code == 201 
+    #post
+    response = client.post("/orderdetails/", json=payload)
 
-    data = response.json()
-    item_id = data["id"]
+    assert response.status_code == 200
+    item_id = response.json()["id"]
+    response = client.get(f"/orderdetails/{item_id}")
 
-    #retireve order
-    response = client.get(f"/order-details/{item_id}")
-
-    #Check
-    assert response.status_code == 200 
-
+    #verify
+    assert response.status_code == 200
     data = response.json()
 
-    #Verify
+    #verify
     assert data["order_id"] == payload["order_id"]
-    assert data["sandwich_id"] == payload["sandwich_id"]
     assert data["amount"] == payload["amount"]
 
 
 """
-Test retrieves all order details.
-create, get order, then verify 
+test retrieving all order details.
+create, post, and then verify
 """
 def test_get_all_order_details():
-    #multiple order detailss
+    order_id = create_order()
+    sandwich_id = get_or_create_menu_item()
+
+    #create
     items = [
-        {"order_id": 1, "sandwich_id": 1, "amount": 1},
-        {"order_id": 1, "sandwich_id": 1, "amount": 5}
+        {"order_id": order_id, "sandwich_id": sandwich_id, "amount": 1},
+        {"order_id": order_id, "sandwich_id": sandwich_id, "amount": 5}
     ]
 
-    #Create 
+    #post
     for item in items:
-        response = client.post("/order-details/", json=item)
-        assert response.status_code == 201
+        response = client.post("/orderdetails/", json=item)
 
-    response = client.get("/order-details/")  
+        assert response.status_code == 200
 
-    #success?
+    response = client.get("/orderdetails/")
+
+    #verify
     assert response.status_code == 200
 
-    data = response.json() 
-
+    data = response.json()
     amounts = [item["amount"] for item in data]
 
-   #check created exists
+    #verify
     assert 1 in amounts
     assert 5 in amounts

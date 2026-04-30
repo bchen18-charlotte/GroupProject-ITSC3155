@@ -1,31 +1,27 @@
 from fastapi.testclient import TestClient
-from ..controllers import orders as controller
 from ..main import app
-import pytest
-from ..models import orders as model
 
-# Create a test client for the app
 client = TestClient(app)
 
-
-@pytest.fixture
-def db_session(mocker):
-    return mocker.Mock()
-
-
-def test_create_order(db_session):
-    # Create a sample order
-    order_data = {
+def test_create_order():
+    payload = {
         "customer_name": "John Doe",
-        "description": "Test order"
+        "phone": "123-456-7890",
+        "address": "123 Main St",
+        "order_type": "pickup",
+        "total_price": 9.99,
+        "status": "pending"
     }
 
-    order_object = model.Order(**order_data)
+    response = client.post("/orders/", json=payload)
 
-    # Call the create function
-    created_order = controller.create(db_session, order_object)
+    assert response.status_code == 200
 
-    # Assertions
-    assert created_order is not None
-    assert created_order.customer_name == "John Doe"
-    assert created_order.description == "Test order"
+    data = response.json()
+
+    assert data["customer_name"] == payload["customer_name"]
+    assert data["phone"] == payload["phone"]
+    assert data["address"] == payload["address"]
+    assert data["order_type"] == payload["order_type"]
+    assert data["total_price"] == payload["total_price"]
+    assert data["status"] == payload["status"]
