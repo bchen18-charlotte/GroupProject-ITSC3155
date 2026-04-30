@@ -4,20 +4,17 @@ from datetime import datetime
 from ..dependencies.database import Base
 import enum
 
-
 class PaymentType(str, enum.Enum):
     credit_card = "credit_card"
     debit_card = "debit_card"
     paypal = "paypal"
     cash = "cash"
 
-
 class TransactionStatus(str, enum.Enum):
     pending = "pending"
     completed = "completed"
     failed = "failed"
     refunded = "refunded"
-
 
 class Payment(Base):
     __tablename__ = "payments"

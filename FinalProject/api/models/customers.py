@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from ..dependencies.database import Base
 
-
 class Customer(Base):
     __tablename__ = "customers"
 
@@ -14,3 +13,4 @@ class Customer(Base):
 
     orders = relationship("Order", back_populates="customer")
     reviews = relationship("Review", back_populates="customer")
+    comments = relationship("Comment", back_populates="customer")

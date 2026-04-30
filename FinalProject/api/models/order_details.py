@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
 from ..dependencies.database import Base
 
-
 class OrderDetail(Base):
     __tablename__ = "order_details"
 

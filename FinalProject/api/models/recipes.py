@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
 from ..dependencies.database import Base
 
-
 class MenuItemIngredient(Base):
     __tablename__ = "menu_item_ingredients"
 
