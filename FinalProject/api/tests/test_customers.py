@@ -8,7 +8,7 @@ client = TestClient(app)
 
 #gotta delete the old tests so that duplicates aren't created ...
 def delete_customer_by_email(email):
-    db = next(get_db())
+    db = next(get_db()) 
 
     customer = db.query(model.Customer).filter(
         model.Customer.email == email
