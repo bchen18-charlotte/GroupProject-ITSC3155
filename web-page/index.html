@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Bio</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
+</head>
+<body>
+
+<header>
+    <h1>Meet Our Team</h1>
+    <!-- Example team logo -->
+    <img src="img/team-logo.png" alt="Team Logo" class="team-logo">
+
+    <!-- Navigation menu to switch between sections -->
+    <nav>
+        <button onclick="showSection('bios')">Team Bios</button>
+        <button onclick="showSection('vision')">Team Vision</button>
+    </nav>
+</header>
+
+<!-- Team bios section (default section) -->
+<div id="bios" class="container">
+    <!-- Each card represents an individual team member -->
+    <!-- Start Ryan West -->
+    <div class="card">
+        <img src="https://avatars.githubusercontent.com/u/93342076?v=4" alt="Ryan West" class="avatar-placeholder">
+        <h2>Ryan West</h2>
+        <p>Team Member</p>
+        <button onclick="toggleBio('bio1')">Show Bio</button>
+        <div id="bio1" class="bio">
+            <p>Ryan is a skilled team member who specializes in deployment and documentation. He has two years of experience in Cyber Security.</p>
+            <div class="moodboard">
+                <h3 class="moodboard-title">Moodboard</h3>
+                <div class="moodboard-items">
+                    <img class="moodboard-img" src="https://www.brookings.edu/wp-content/uploads/2017/11/metro_20171121_tech-empowers-tech-polarizes-mark-muro.jpg?quality=75&w=1500" alt="Circuit Boards">
+                    <img class="moodboard-img" src="https://img.freepik.com/premium-vector/sql-server-icon-black-line-art-vector-logo_1223784-35478.jpg?semt=ais_incoming&w=740&q=80" alt="Database">
+                </div>
+                <div>
+                    <a href="https://github.com/rmwest1211">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Ryan West -->
+
+    <!--Start Brian Mellinger-->
+    <div class="card">
+        <img src="../web-page\img\image_7.png" alt="Brian Mellinger's avatar" class="avatar-placeholder">
+        <h2 style="font-family: Comic Sans">Brian Mellinger</h2>
+        <p><strong>Team Member</strong></p>
+        <button onclick="toggleBio('bio2')">Show Bio</button>
+        <div id="bio2" class="bio">
+            <p>Brian is a team member with experience in software development. He has a strong background in Java programming and is excited to work on projects and build new things.</p>
+            <div class="moodboard">
+                <h3 class="moodboard-title">Moodboard</h3>
+                <div class="moodboard-items">
+                    <img class="moodboard-img" src="../web-page/img/moodboard.png" alt="Moodboard of a rocket and computer">
+                </div>
+                <div>
+                    <a href="https://github.com/bmelling-stack">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!--End Brian Mellinger-->
+
+    <!-- Start Bin Chen -->
+    <div class="card">
+        <img src="../web-page\img\image_7.png" alt="Brian Mellinger's avatar" class="avatar-placeholder">
+        <h2 style="font-family: Comic Sans">Bin Chenr</h2>
+        <p><strong>Team Member</strong></p>
+        <button onclick="toggleBio('bio3')">Show Bio</button>
+        <div id="bio3" class="bio">
+            <p>Bin is a team member with experience in Networking. He is also trying to pursue a career in Cyber Security.</p>
+            <div class="moodboard">
+                <h3 class="moodboard-title">Moodboard</h3>
+                <div class="moodboard-items">
+                   <img class="moodboard-img" src="https://eu-images.contentstack.com/v3/assets/blt69509c9116440be8/blt8ffb90a2f64bacfa/6776f4544b281ca5e2bc465a/cybersecurity_NicoElNino-AlamyStockPhoto.jpg?width=1280&auto=webp&quality=80&format=jpg&disable=upscale" alt="Cyber Security">
+
+                </div>
+                <div>
+                    <a href="https://github.com/bchen18-charlotte">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Bin Chen -->
+
+        <!-- Start Drew Karash -->
+    <div class="card">
+        <img src="../web-page\img\drew_pfp.png" alt="Drew Karash's avatar" class="avatar-placeholder">
+        <h2 style="font-family: Comic Sans">Drew Karash</h2>
+        <p><strong>Team Member</strong></p>
+        <button onclick="toggleBio('bio4')">Show Bio</button>
+        <div id="bio4" class="bio">
+            <p>Drew is a member with experience in data and SQL, with a passion for learning and applying new knowledge.</p>
+            <div class="moodboard">
+                <h3 class="moodboard-title">Moodboard</h3>
+                <div class="moodboard-items">
+                   <img class="moodboard-img" src="../web-page/img/drew_moodboard.png" alt="Programming skills on cogs">
+                </div>
+                <div>
+                    <a href="https://github.com/DrewK-h">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Drew Karash -->
+</div>
+
+<!-- Team vision/mission statement section (hidden by default) -->
+<div id="vision" class="container" style="display: none; padding: 30px">
+    <h1><strong>Our Mission Statement</strong></h1>
+    <p>We strive to create a fun working environment for our team so that we can invent and innovate various systems to make the world an easier place.
+        A lot of our personal goals include making honest systems for others to use in a safe and secure way. We want to make sure that our team is always 
+        learning and growing together, and that we are always pushing ourselves to be better. Our good work ethic will allow us to create great products 
+        and have fun doing it!
+    </p>
+    <h2><strong>Here are our rules:</strong></h2>
+    <ul>
+        <li><strong>Respect</strong> all team members</li>
+        <li><strong>Communicate</strong> openly, honestly, and consistently</li>
+        <li><strong>Support</strong> each other's growth and development. Offer help if you can </li>
+        <li><strong>Respond</strong> to feedback in a timely manner</li>
+    </ul>
+</div>
+
+<script src="script.js"></script> <!-- Link to external JavaScript file -->
+
+</body>
+</html>
