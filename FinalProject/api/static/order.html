@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order — Group 17</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="nav"></nav>
+<div class="page-wide">
+    <div class="page-header">
+        <h1>Place an Order</h1>
+    </div>
+
+    <div class="two-col">
+        <!--Menu -->
+        <div>
+            <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+                <select id="cat-filter" style="padding:6px 10px;border:1px solid var(--border);border-radius:3px;font-size:13px" onchange="filterMenu()">
+                    <option value="">All categories</option>
+                    <option value="entree">Entrées</option>
+                    <option value="side">Sides</option>
+                    <option value="dessert">Desserts</option>
+                    <option value="beverage">Beverages</option>
+                </select>
+            </div>
+            <div id="menu-items"><p class="loading">Loading menu...</p></div>
+        </div>
+
+        <!-- Cart and form -->
+        <div>
+            <div class="card" style="position:sticky;top:62px">
+                <h3>Your Order <span id="cart-count" style="color:var(--grey);font-weight:400;font-size:12px"></span></h3>
+                <div id="cart-items"><p class="empty">No items added yet.</p></div>
+
+                <!-- Step 1: Order details -->
+                <div id="order-form">
+                    <div class="divider"></div>
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" id="cust-name" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" id="cust-phone" placeholder="555-0000">
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="cust-address" placeholder="123 Main St">
+                    </div>
+                    <div class="form-group">
+                        <label>Order Type</label>
+                        <select id="order-type">
+                            <option value="delivery">Delivery</option>
+                            <option value="pickup">Pickup</option>
+                            <option value="dine_in">Dine In</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;gap:6px;margin-bottom:12px">
+                        <input type="text" id="promo-code" placeholder="Promo code" style="flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:3px;font-size:13px">
+                        <button class="btn btn-sm" onclick="applyPromo()">Apply</button>
+                    </div>
+                    <div id="promo-msg" style="font-size:12px;margin-bottom:8px"></div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+                        <span style="font-size:13px;color:var(--grey)">Total</span>
+                        <strong id="total-display" style="font-size:18px">$0.00</strong>
+                    </div>
+                    <div id="order-alert"></div>
+                    <button class="btn btn-red btn-block" id="submit-btn" onclick="placeOrder()" disabled>Place Order</button>
+                </div>
+
+                <!-- Stp2 Payment -->
+                <div id="payment-form" style="display:none">
+                    <div class="divider"></div>
+                    <p style="font-size:12px;color:var(--grey);margin-bottom:14px">
+                        Order <strong id="payment-order-id"></strong> created. Enter payment details below.
+                    </p>
+                    <div class="form-group">
+                        <label>Payment Type *</label>
+                        <select id="pay-type" onchange="toggleCardFields()">
+                            <option value="credit_card">Credit Card</option>
+                            <option value="debit_card">Debit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                    </div>
+                    <div id="card-fields">
+                        <div class="form-group">
+                            <label>Card Holder Name *</label>
+                            <input type="text" id="pay-name" placeholder="Name on card">
+                        </div>
+                        <div class="form-group">
+                            <label>Last 4 Digits *</label>
+                            <input type="text" id="pay-last4" placeholder="1234" maxlength="4">
+                        </div>
+                    </div>
+                    <div id="payment-alert"></div>
+                    <button class="btn btn-red btn-block" id="pay-btn" onclick="submitPayment()">Submit Payment</button>
+                    <button class="btn btn-block" onclick="skipPayment()" style="margin-top:6px;font-size:12px;color:var(--grey)">Skip — pay in person</button>
+                </div>
+
+                <!-- Success -->
+                <div id="order-success" style="display:none;text-align:center;padding:16px 0">
+                    <div style="font-size:32px;margin-bottom:8px">✓</div>
+                    <h3 style="color:var(--red)">Order Complete</h3>
+                    <p style="font-size:13px;color:var(--grey);margin:8px 0">Order ID: <strong id="success-id"></strong></p>
+                    <p id="success-payment" style="font-size:12px;color:var(--grey);margin-bottom:12px"></p>
+                    <button class="btn btn-sm" onclick="resetOrder()" style="margin-top:8px">New Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="auth.js"></script>
+<script src="order.js"></script>
+</body>
+</html>

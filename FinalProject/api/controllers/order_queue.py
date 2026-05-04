@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 
 def add_to_queue(db: Session, order_id: int):
-    """Automatically adds a new order to the back of the queue."""
+    """Automatically adds a new order to the back of the queue"""
     try:
         #Get the current max position
         max_position = db.query(model.OrderQueue).count()
@@ -23,7 +23,7 @@ def add_to_queue(db: Session, order_id: int):
 
 
 def remove_from_queue(db: Session, order_id: int):
-    """Removes an order from the queue and shifts remaining positions down."""
+    """Removes an order from the queue and shifts remaining"""
     try:
         item = db.query(model.OrderQueue).filter(model.OrderQueue.order_id == order_id)
         queue_entry = item.first()

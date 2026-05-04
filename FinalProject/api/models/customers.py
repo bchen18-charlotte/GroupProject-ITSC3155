@@ -14,3 +14,4 @@ class Customer(Base):
     orders = relationship("Order", back_populates="customer")
     reviews = relationship("Review", back_populates="customer")
     comments = relationship("Comment", back_populates="customer")
+    user = relationship("User", back_populates="customer", uselist=False)

@@ -5,8 +5,8 @@ from .order_details import OrderDetail
 
 class OrderBase(BaseModel):
     customer_name: str
-    phone: str
-    address: str
+    phone: Optional[str] = None
+    address: Optional[str] = None
     order_type: str
     total_price: float
     status: Optional[str] = "pending"
