@@ -4,6 +4,7 @@ from typing import Optional
 from ..controllers import sandwiches as controller
 from ..schemas import sandwiches as schema
 from ..dependencies.database import get_db
+from ..dependencies.auth import require_staff
 
 router = APIRouter(
     tags=['Menu Items'],
@@ -11,7 +12,7 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=schema.Sandwich)
-def create(request: schema.SandwichCreate, db: Session = Depends(get_db)):
+def create(request: schema.SandwichCreate, db: Session = Depends(get_db), _=Depends(require_staff)):
     return controller.create(db=db, request=request)
 
 @router.get("/", response_model=list[schema.Sandwich])
@@ -32,13 +33,13 @@ def read_one(item_id: int, db: Session = Depends(get_db)):
     return controller.read_one(db, item_id=item_id)
 
 @router.put("/{item_id}/toggle", response_model=schema.Sandwich)
-def toggle_active(item_id: int, db: Session = Depends(get_db)):
+def toggle_active(item_id: int, db: Session = Depends(get_db), _=Depends(require_staff)):
     return controller.toggle_active(db=db, item_id=item_id)
 
 @router.put("/{item_id}", response_model=schema.Sandwich)
-def update(item_id: int, request: schema.SandwichUpdate, db: Session = Depends(get_db)):
+def update(item_id: int, request: schema.SandwichUpdate, db: Session = Depends(get_db), _=Depends(require_staff)):
     return controller.update(db=db, request=request, item_id=item_id)
 
 @router.delete("/{item_id}")
-def delete(item_id: int, db: Session = Depends(get_db)):
+def delete(item_id: int, db: Session = Depends(get_db), _=Depends(require_staff)):
     return controller.delete(db=db, item_id=item_id)

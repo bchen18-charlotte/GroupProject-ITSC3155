@@ -12,12 +12,14 @@ from . import (
     comment_responses,
     order_queue,
     menu_item_promotions,
+    users,
 )
 
 from ..dependencies.database import engine
 
 def index():
     customers.Base.metadata.create_all(engine)
+    users.Base.metadata.create_all(engine)
     sandwiches.Base.metadata.create_all(engine)
     resources.Base.metadata.create_all(engine)
     recipes.Base.metadata.create_all(engine)

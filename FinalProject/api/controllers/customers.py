@@ -50,8 +50,17 @@ def update(db: Session, item_id, request):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return item.first()
 
-def delete(db: Session, item_id):
+def delete(db: Session, item_id: int):
     try:
+        #Delete linked user record first if exists
+        from ..models import users as users_model
+        user = db.query(users_model.User).filter(
+            users_model.User.customer_id == item_id
+        ).first()
+        if user:
+            db.delete(user)
+            db.commit()
+
         item = db.query(model.Customer).filter(model.Customer.id == item_id)
         if not item.first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")

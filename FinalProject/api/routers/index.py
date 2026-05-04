@@ -1,4 +1,5 @@
 from . import (
+    auth,
     customers,
     sandwiches,
     resources,
@@ -12,9 +13,11 @@ from . import (
     comment_responses,
     order_queue,
     menu_item_promotions,
+    analytics,
 )
 
 def load_routes(app):
+    app.include_router(auth.router)
     app.include_router(customers.router)
     app.include_router(sandwiches.router)
     app.include_router(resources.router)
@@ -28,3 +31,4 @@ def load_routes(app):
     app.include_router(comment_responses.router)
     app.include_router(order_queue.router)
     app.include_router(menu_item_promotions.router)
+    app.include_router(analytics.router)

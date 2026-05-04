@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from ..controllers import menu_item_promotions as controller
 from ..schemas import menu_item_promotions as schema
 from ..dependencies.database import get_db
+from ..dependencies.auth import require_staff
 
 router = APIRouter(
     tags=['Menu Item Promotions'],
@@ -10,7 +11,7 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=schema.MenuItemPromotion)
-def create(request: schema.MenuItemPromotionCreate, db: Session = Depends(get_db)):
+def create(request: schema.MenuItemPromotionCreate, db: Session = Depends(get_db), _=Depends(require_staff)):
     return controller.create(db=db, request=request)
 
 @router.get("/", response_model=list[schema.MenuItemPromotion])
@@ -30,5 +31,5 @@ def read_one(item_id: int, db: Session = Depends(get_db)):
     return controller.read_one(db, item_id=item_id)
 
 @router.delete("/{item_id}")
-def delete(item_id: int, db: Session = Depends(get_db)):
+def delete(item_id: int, db: Session = Depends(get_db), _=Depends(require_staff)):
     return controller.delete(db=db, item_id=item_id)
